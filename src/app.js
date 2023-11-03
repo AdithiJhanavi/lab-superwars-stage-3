@@ -21,39 +21,56 @@ const PLAYERS = [
     "Slingo"
 ];
 
-// initialize players with image and strength
-const initPlayers = (players) => {
-    let detailedPlayers = '';
 
-    // Instead of forloop use Map method
-    // Code here
+const initializePlayers = (players) => {
+    const detailedPlayers = [];
+        players.forEach((apple, mango) => {
+          detailedPlayers.push({
+            name: apple,
+            strength: getRandomStrength(),
+            image: 'images/super-' + (mango + 1) + '.png',
+            type: mango % 2 == 0 ? 'hero' : 'villain',
+            id: mango + 1,
+          });
+        });
+        return detailedPlayers;
+};
 
-    return detailedPlayers;
-}
-
-// getting random strength
 const getRandomStrength = () => {
-    return Math.ceil(Math.random() * 100);
-}
+return Math.ceil(Math.random() * 100);
+};
 
-// Build player template
+const view = (playerdecision) => {
+  const player = document.createElement('div');
+  player.classList.add('player');
+  let image = document.createElement('img');
+  image.setAttribute('src', playerdecision.image);
+  image.setAttribute('alt', '');
+  let name = document.createElement('div');
+  name.className = 'name';
+  name.textContent = playerdecision.name;
+  let strength = document.createElement('div');
+  strength.textContent = playerdecision.strength;
+  strength.className = 'strength';
+  player.append(image, name, strength);
+  return player;
+};
+
 const buildPlayers = (players, type) => {
-    let fragment = '';
-
-    // Instead of using for loop
-    // Use chaining of Array methods - filter, map and join
-    // Type your code here
-
+  let fragment = document.createElement('div');
+  players
+    .filter((player) => player.type == type)
+    .forEach((player) => fragment.append(view(player)));
+  return fragment.innerHTML;
     return fragment;
-}
-
-// Display players in HTML
+};
 const viewPlayers = (players) => {
+
     document.getElementById('heroes').innerHTML = buildPlayers(players, 'hero');
     document.getElementById('villains').innerHTML = buildPlayers(players, 'villain');
-}
 
+};
 
 window.onload = () => {
-    viewPlayers(initPlayers(PLAYERS));
-}
+    viewPlayers(initializePlayers(PLAYERS));
+};
